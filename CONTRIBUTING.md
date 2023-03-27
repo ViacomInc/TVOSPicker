@@ -20,4 +20,4 @@ You can run tests by opening `Package.swift` with Xcode and using `Product -> Te
 2. Create your feature branch `git checkout -b feature/my-new-feature`
 3. Commit your changes through `git commit`
 4. Push to the branch `git push origin feature/my-new-feature`
-5. Create a new [Pull Request](https://github.com/ViacomInc/TVOSPickerView/compare)
+5. Create a new [Pull Request](https://github.com/ViacomInc/TVOSPicker/compare)

@@ -15,7 +15,7 @@
 		4712FF3A29D1BD0C006EBD80 /* TVOSPickerViewExamplesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4712FF3929D1BD0C006EBD80 /* TVOSPickerViewExamplesTests.swift */; };
 		4712FF4429D1BD0C006EBD80 /* TVOSPickerViewExamplesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4712FF4329D1BD0C006EBD80 /* TVOSPickerViewExamplesUITests.swift */; };
 		4712FF4629D1BD0C006EBD80 /* TVOSPickerViewExamplesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4712FF4529D1BD0C006EBD80 /* TVOSPickerViewExamplesUITestsLaunchTests.swift */; };
-		47BD0E2B29D1BE4000B3DF8B /* TVOSPickerView in Frameworks */ = {isa = PBXBuildFile; productRef = 47BD0E2A29D1BE4000B3DF8B /* TVOSPickerView */; };
+		47BD0E3029D1D42500B3DF8B /* TVOSPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 47BD0E2F29D1D42500B3DF8B /* TVOSPicker */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +47,7 @@
 		4712FF3F29D1BD0C006EBD80 /* TVOSPickerViewExamplesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TVOSPickerViewExamplesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4712FF4329D1BD0C006EBD80 /* TVOSPickerViewExamplesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVOSPickerViewExamplesUITests.swift; sourceTree = "<group>"; };
 		4712FF4529D1BD0C006EBD80 /* TVOSPickerViewExamplesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVOSPickerViewExamplesUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		47BD0E2829D1BE1000B3DF8B /* TVOSPickerView */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TVOSPickerView; path = ../..; sourceTree = "<group>"; };
+		47BD0E2E29D1D41300B3DF8B /* TVOSPickerView */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TVOSPickerView; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				47BD0E2B29D1BE4000B3DF8B /* TVOSPickerView in Frameworks */,
+				47BD0E3029D1D42500B3DF8B /* TVOSPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,7 +79,7 @@
 		4712FF1929D1BD0B006EBD80 = {
 			isa = PBXGroup;
 			children = (
-				47BD0E2729D1BE1000B3DF8B /* Packages */,
+				47BD0E2D29D1D41300B3DF8B /* Packages */,
 				4712FF2429D1BD0B006EBD80 /* TVOSPickerViewExamples */,
 				4712FF3829D1BD0C006EBD80 /* TVOSPickerViewExamplesTests */,
 				4712FF4229D1BD0C006EBD80 /* TVOSPickerViewExamplesUITests */,
@@ -127,19 +127,19 @@
 			path = TVOSPickerViewExamplesUITests;
 			sourceTree = "<group>";
 		};
-		47BD0E2729D1BE1000B3DF8B /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				47BD0E2829D1BE1000B3DF8B /* TVOSPickerView */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		47BD0E2929D1BE4000B3DF8B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		47BD0E2D29D1D41300B3DF8B /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				47BD0E2E29D1D41300B3DF8B /* TVOSPickerView */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,7 +159,7 @@
 			);
 			name = TVOSPickerViewExamples;
 			packageProductDependencies = (
-				47BD0E2A29D1BE4000B3DF8B /* TVOSPickerView */,
+				47BD0E2F29D1D42500B3DF8B /* TVOSPicker */,
 			);
 			productName = TVOSPickerViewExamples;
 			productReference = 4712FF2229D1BD0B006EBD80 /* TVOSPickerViewExamples.app */;
@@ -609,9 +609,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		47BD0E2A29D1BE4000B3DF8B /* TVOSPickerView */ = {
+		47BD0E2F29D1D42500B3DF8B /* TVOSPicker */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = TVOSPickerView;
+			productName = TVOSPicker;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

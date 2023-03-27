@@ -1,5 +1,5 @@
 import UIKit
-import TVOSPickerView
+import TVOSPicker
 
 class TimePickerDelegate: TVOSPickerViewDelegate {
     struct Time {
