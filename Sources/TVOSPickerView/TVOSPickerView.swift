@@ -77,6 +77,7 @@ public class TVOSPickerView: UIView {
 
 // MARK: Public API
 extension TVOSPickerView {
+    /// Call this method to reload all the data that’s used to construct the picker view.
     public func reloadData() {
         guard frame.width > 0 else { return }
         guard let delegate else { return }
@@ -98,6 +99,7 @@ extension TVOSPickerView {
         accessibilityElements = components
     }
 
+    /// Call this method to reload all the data that’s used to construct the selected components of the picker view.
     public func reloadComponents(_ indices: IndexSet) {
         indices.forEach {
             let component = self.components[$0]
@@ -108,6 +110,7 @@ extension TVOSPickerView {
         }
     }
 
+    /// Call this method to reload all the data that’s used to construct the selected component of the picker view.
     public func reloadComponent(_ index: Int) {
         reloadComponents([index])
     }
