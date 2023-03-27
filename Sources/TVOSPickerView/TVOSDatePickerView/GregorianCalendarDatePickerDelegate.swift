@@ -9,8 +9,23 @@ private func ordinalNumberFormatter(withLocale locale: Locale) -> NumberFormatte
     return formatter
 }
 
-/// Supports only Gregorian calendar and only month/day/year order of components.
+/// Supports only Gregorian calendar.
 public class GregorianCalendarDatePickerDelegate {
+    public enum DateComponentsOrder {
+        case dayMonthYear
+        case monthDayYear
+        case yearMonthDay
+
+        var dateComponents: [Calendar.Component] {
+            switch self {
+            case .dayMonthYear: return [.day, .month, .year]
+            case .monthDayYear: return [.month, .day, .year]
+            case .yearMonthDay: return [.year, .month, .day]
+            }
+        }
+    }
+    private let order: DateComponentsOrder
+
     private let locale: Locale
     private var calendar = Calendar(identifier: .gregorian)
 
@@ -25,6 +40,7 @@ public class GregorianCalendarDatePickerDelegate {
     public private(set) var date: Date
 
     public init(
+        order: DateComponentsOrder = .monthDayYear,
         locale: Locale = .autoupdatingCurrent,
         minYear: Int = 1900,
         maxYear: Int? = nil,
@@ -36,6 +52,7 @@ public class GregorianCalendarDatePickerDelegate {
         stringFromYear: ((Int) -> String)? = nil,
         accessibilityStringFromYear: ((Int) -> String)? = nil
     ) {
+        self.order = order
         self.locale = locale
         calendar.locale = locale
         self.minYear = minYear
@@ -64,21 +81,11 @@ public class GregorianCalendarDatePickerDelegate {
     }
 
     private func dateComponent(forIndex index: Int) -> Calendar.Component {
-        switch index {
-        case 0: return .month
-        case 1: return .day
-        case 2: return .year
-        default: preconditionFailure("index must be in range 0...2")
-        }
+        order.dateComponents[index]
     }
 
     private func index(ofDateComponent component: Calendar.Component) -> Int {
-        switch component {
-        case .month: return 0
-        case .day: return 1
-        case .year: return 2
-        default: preconditionFailure("only .month, .day and .year is supported")
-        }
+        order.dateComponents.firstIndex(of: component) ?? 0
     }
 }
 
