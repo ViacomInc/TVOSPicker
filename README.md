@@ -104,4 +104,4 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## License
 
-TODO
+TVOSPicker is released under the Apache 2.0 license. [See LICENSE](LICENSE) for details.
