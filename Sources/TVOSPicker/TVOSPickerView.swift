@@ -6,7 +6,7 @@ import UIKit
 public class TVOSPickerView: UIView {
     private var firstReload = true
     private let stack = UIStackView()
-    private var components: [TVOSPickerComponentView] = []
+    internal var components: [TVOSPickerComponentView] = []
 
     public var lastFocusedComponentIndex: Int?
 
@@ -101,9 +101,10 @@ extension TVOSPickerView {
 
     /// Call this method to reload all the data that’s used to construct the selected components of the picker view.
     public func reloadComponents(_ indices: IndexSet) {
-        indices.forEach {
-            let component = self.components[$0]
-            if let width = self.delegate?.pickerView(self, widthForComponent: $0) {
+        indices.forEach { index in
+            guard index >= 0 && index < self.components.count else { return }
+            let component = self.components[index]
+            if let width = self.delegate?.pickerView(self, widthForComponent: index) {
                 component.setupWidthConstraint(constant: width)
             }
             component.reloadData()

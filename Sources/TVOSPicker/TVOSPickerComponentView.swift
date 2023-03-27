@@ -20,7 +20,7 @@ class TVOSPickerComponentView: UIView {
 
     private let tableView = UITableView()
     private let selectedCellBackground = UIView()
-    private var widthConstraint: NSLayoutConstraint?
+    internal var widthConstraint: NSLayoutConstraint?
 
     private var focusInside = false
 

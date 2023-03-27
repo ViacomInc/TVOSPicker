@@ -2,10 +2,10 @@
 
 import UIKit
 
-public struct TVOSPickerViewStyle {
+public struct TVOSPickerViewStyle: Equatable {
     public var componentSpacing: CGFloat
 
-    public struct Backgrounds {
+    public struct Backgrounds: Equatable {
         public var selectedCellBackgroundColor: UIColor
         public var focusedCellBackgroundColor: UIColor
 
@@ -16,7 +16,7 @@ public struct TVOSPickerViewStyle {
     }
     public var backgrounds: Backgrounds
 
-    public struct Labels {
+    public struct Labels: Equatable {
         public var selectedCellTextColor: UIColor
         public var unselectedCellTextColor: UIColor
         public var focusedCellTextColor: UIColor

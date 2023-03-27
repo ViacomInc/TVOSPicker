@@ -23,7 +23,7 @@ extension TVOSPickerViewStyle {
 }
 
 public class TVOSDatePickerView: UIView {
-    private let pickerView: TVOSPickerView
+    internal let pickerView: TVOSPickerView
 
     public var style: TVOSPickerViewStyle {
         didSet {
