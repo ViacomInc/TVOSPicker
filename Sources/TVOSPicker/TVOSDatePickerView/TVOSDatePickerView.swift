@@ -22,6 +22,8 @@ extension TVOSPickerViewStyle {
     )
 }
 
+/// This component displays a `TVOSPickerView` restricting its delegate object to be
+/// an instance of `GregorianCalendarDatePickerDelegate` class.
 public class TVOSDatePickerView: UIView {
     internal let pickerView: TVOSPickerView
 

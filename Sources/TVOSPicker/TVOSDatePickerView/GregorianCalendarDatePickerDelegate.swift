@@ -9,7 +9,9 @@ private func ordinalNumberFormatter(withLocale locale: Locale) -> NumberFormatte
     return formatter
 }
 
-/// Supports only Gregorian calendar.
+/// `GregorianCalendarDatePickerDelegate` is a class conforming to `TVOSPickerViewDelegate`
+/// that can be used with `TVOSDatePickerView` to display a date picker allowing users to select a date
+/// that is valid in Gregorian calendar using 3 picker components for day, month and year.
 public class GregorianCalendarDatePickerDelegate {
     public enum DateComponentsOrder {
         case dayMonthYear
@@ -39,6 +41,19 @@ public class GregorianCalendarDatePickerDelegate {
     private let maxYear: Int
     public private(set) var date: Date
 
+    /// Returns a new GregorianCalendarDatePickerDelegate
+    ///
+    /// - parameter order: (Optional) The order in which day, month and year components are displayed in the picker view. Defaults to `.monthDayYear`.
+    /// - parameter locale: (Optional) Locale used to localize ordinal numbers, month names etc. Defaults to `.autoupdatingCurrent`.
+    /// - parameter minYear: (Optional) The minimum value for year component of the picker view. Defaults to 1900.
+    /// - parameter maxYear: (Optional) The maximum value for year component of the picker view. Must be greater than or equal to `minYear`. Defaults to current year.
+    /// - parameter initialDate: (Optional) The date that is selected by default in the picker view. Defaults to `Date()`. This date must be in range between minYear and `maxYear`.
+    /// - parameter stringFromMonthIndex: (Optional) Closure used to provide a string that will be displayed for a given row in the month component of the picker view. Defaults to using `Calendar.shortMonthSymbols`, e.g. "Jan" for "January".
+    /// - parameter accessibilityStringFromMonthIndex: (Optional) Closure used to provide a string that will be read by VoiceOver for a given row in the month component of the picker view. Defaults to using `Calendar.monthSymbols`, e.g. "January".
+    /// - parameter stringFromDayIndex: (Optional) Closure used to provide a string that will be displayed for a given row in the day component of the picker view. Defaults to the number with 0 padding, e.g. "01", "02", ..., "25", ..., etc.
+    /// - parameter accessibilityStringFromDayIndex: (Optional) Closure used to provide a string that will be read by VoiceOver for a given row in the day component of the picker view. Defaults to using a `NumberFormatter` with `numberStyle = .ordinal`, e.g. "1st" for first day, "3rd" for third day etc.
+    /// - parameter stringFromYear: (Optional) Closure used to provide a string that will be displayed for a given row in the year component of the picker view. Defaults to the number, e.g. "2023".
+    /// - parameter accessibilityStringFromYear: (Optional) Closure used to provide a string that will be read by VoiceOver for a given row in the year component of the picker view. Defaults to the number, e.g. "2023".
     public init(
         order: DateComponentsOrder = .monthDayYear,
         locale: Locale = .autoupdatingCurrent,

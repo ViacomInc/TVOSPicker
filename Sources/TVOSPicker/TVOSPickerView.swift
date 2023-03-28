@@ -3,6 +3,10 @@
 import Foundation
 import UIKit
 
+/// This component displays one or more components that the user can navigate to select items.
+/// Each component has a list of rows that display a string. Users select items by navigating the
+/// lists to the desired values. You provide the data to display in the picker view and respond to
+/// user selection using a delegate object conforming to `TVOSPickerViewDelegate` protocol.
 public class TVOSPickerView: UIView {
     private var firstReload = true
     private let stack = UIStackView()
