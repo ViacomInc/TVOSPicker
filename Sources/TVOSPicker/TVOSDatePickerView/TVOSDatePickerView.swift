@@ -11,8 +11,9 @@ extension TVOSPickerViewStyle {
         ),
         labels: .init(
             selectedCellTextColor: .white,
-            unselectedCellTextColor: .white.withAlphaComponent(0.3),
+            unselectedCellTextColor: .white.withAlphaComponent(0.7),
             focusedCellTextColor: .black,
+            disabledCellTextColor: .white.withAlphaComponent(0.1),
             font: UIFontDescriptor().withSize(48),
             focusedFont: {
                 let descriptor = UIFontDescriptor().withSize(48)

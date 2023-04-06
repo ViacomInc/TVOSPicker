@@ -198,7 +198,7 @@ class ViewController: UIViewController {
         let datePicker = TVOSDatePickerView(delegate: .init(
             order: .dayMonthYear,
             locale: .current,
-            minYear: 1950,
+            minDate: Date().addingTimeInterval(-100 * 365 * 24 * 60 * 60), // ~ now - 100 years
             initialDate: Date()
         ))
 
