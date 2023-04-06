@@ -82,11 +82,12 @@ class TVOSPickerComponentViewCell: UITableViewCell {
 
     func configure(
         title: String?,
-        style: TVOSPickerViewStyle.Labels
+        style: TVOSPickerViewStyle.Labels,
+        disabled: Bool
     ) {
         label.text = title
         maskedLabel.text = title
-        label.textColor = style.unselectedCellTextColor
+        label.textColor = disabled ? style.disabledCellTextColor : style.unselectedCellTextColor
         maskedLabel.textColor = focusInsideParent ? style.focusedCellTextColor : style.selectedCellTextColor
 
         self.style = style

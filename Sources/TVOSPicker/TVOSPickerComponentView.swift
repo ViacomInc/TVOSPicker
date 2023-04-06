@@ -4,6 +4,7 @@ import UIKit
 
 protocol TVOSPickerComponentViewDelegate: AnyObject {
     func numberOfItems(inPickerComponentView componentView: TVOSPickerComponentView) -> Int
+    func rangeOfAllowedRows(inPickerComponentView componentView: TVOSPickerComponentView) -> ClosedRange<Int>?
     func pickerComponentView(_ componentView: TVOSPickerComponentView, didSelectRow row: Int)
     func pickerComponentView(_ componentView: TVOSPickerComponentView, titleForRow row: Int) -> String?
     func pickerComponentView(_ componentView: TVOSPickerComponentView, accessibilityStringForRow row: Int) -> String?
@@ -19,6 +20,7 @@ class TVOSPickerComponentView: UIView {
     }
 
     private let tableView = UITableView()
+    private var rangeOfAllowedIndices: ClosedRange<Int>?
     private let selectedCellBackground = UIView()
     internal var widthConstraint: NSLayoutConstraint?
 
@@ -130,6 +132,7 @@ class TVOSPickerComponentView: UIView {
     }
 
     func reloadData() {
+        rangeOfAllowedIndices = delegate?.rangeOfAllowedRows(inPickerComponentView: self)
         tableView.reloadData()
         if let index = delegate?.indexOfSelectedRow(inPickerComponentView: self) {
             let path = IndexPath(item: index, section: 0)
@@ -198,7 +201,8 @@ extension TVOSPickerComponentView: UITableViewDataSource {
         if let cell = cell as? TVOSPickerComponentViewCell, let delegate {
             cell.configure(
                 title: delegate.pickerComponentView(self, titleForRow: indexPath.item),
-                style: style.labels
+                style: style.labels,
+                disabled: !(rangeOfAllowedIndices?.contains(indexPath.item) ?? true)
             )
             cell.configureAccessibility(
                 label: { [weak self] in
@@ -238,6 +242,10 @@ extension TVOSPickerComponentView: UITableViewDelegate {
         }
         tableView.selectRow(at: next, animated: false, scrollPosition: .none)
         didSelectRow(next.item)
+    }
+
+    func tableView(_ tableView: UITableView, canFocusRowAt indexPath: IndexPath) -> Bool {
+        rangeOfAllowedIndices?.contains(indexPath.item) ?? true
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

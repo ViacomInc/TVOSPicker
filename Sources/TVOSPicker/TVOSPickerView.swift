@@ -130,6 +130,13 @@ extension TVOSPickerView: TVOSPickerComponentViewDelegate {
         return delegate.pickerView(self, numberOfRowsInComponent: component)
     }
 
+    func rangeOfAllowedRows(inPickerComponentView componentView: TVOSPickerComponentView) -> ClosedRange<Int>? {
+        guard let component = components.firstIndex(of: componentView),
+              let delegate
+        else { return nil }
+        return delegate.pickerView(self, rangeOfAllowedRowsInComponent: component)
+    }
+
     func pickerComponentView(_ componentView: TVOSPickerComponentView, titleForRow row: Int) -> String? {
         guard let component = components.firstIndex(of: componentView),
               let delegate

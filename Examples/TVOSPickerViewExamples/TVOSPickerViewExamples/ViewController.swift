@@ -104,6 +104,10 @@ class PlacePickerDelegate: TVOSPickerViewDelegate {
         places.count
     }
 
+    func pickerView(_ pickerView: TVOSPickerView, rangeOfAllowedRowsInComponent component: Int) -> ClosedRange<Int>? {
+        17...25
+    }
+
     func pickerView(_ pickerView: TVOSPickerView, titleForRow row: Int, inComponent component: Int) -> String? {
         places[row]
     }
@@ -161,8 +165,9 @@ class ViewController: UIViewController {
             ),
             labels: .init(
                 selectedCellTextColor: .white,
-                unselectedCellTextColor: .white.withAlphaComponent(0.7),
-                focusedCellTextColor: .black
+                unselectedCellTextColor: .white.withAlphaComponent(0.3),
+                focusedCellTextColor: .black,
+                disabledCellTextColor: .white.withAlphaComponent(0.7)
             )
         )
         let timePicker = TVOSPickerView(style: timePickerStyle, delegate: timePickerDelegate)

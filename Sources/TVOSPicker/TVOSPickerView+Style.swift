@@ -20,6 +20,7 @@ public struct TVOSPickerViewStyle: Equatable {
         public var selectedCellTextColor: UIColor
         public var unselectedCellTextColor: UIColor
         public var focusedCellTextColor: UIColor
+        public var disabledCellTextColor: UIColor
         public var font: UIFontDescriptor?
         public var focusedFont: UIFontDescriptor?
 
@@ -27,12 +28,14 @@ public struct TVOSPickerViewStyle: Equatable {
             selectedCellTextColor: UIColor,
             unselectedCellTextColor: UIColor,
             focusedCellTextColor: UIColor,
+            disabledCellTextColor: UIColor,
             font: UIFontDescriptor? = nil,
             focusedFont: UIFontDescriptor? = nil
         ) {
             self.selectedCellTextColor = selectedCellTextColor
             self.unselectedCellTextColor = unselectedCellTextColor
             self.focusedCellTextColor = focusedCellTextColor
+            self.disabledCellTextColor = disabledCellTextColor
             self.font = font
             self.focusedFont = focusedFont
         }
@@ -60,7 +63,8 @@ extension TVOSPickerViewStyle {
         labels: .init(
             selectedCellTextColor: .black,
             unselectedCellTextColor: .white,
-            focusedCellTextColor: .black
+            focusedCellTextColor: .black,
+            disabledCellTextColor: .white.withAlphaComponent(0.3)
         )
     )
 }
