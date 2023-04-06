@@ -13,6 +13,7 @@ final class TVOSPickerTests: XCTestCase {
         XCTAssertEqual(picker.components.count, 0)
         XCTAssertEqual(delegate.numberOfComponentsMethodCalls, 0)
         XCTAssertEqual(delegate.numberOfRowsInComponentMethodCalls, 0)
+        XCTAssertEqual(delegate.rangeOfAllowedRowsInComponentMethodCalls, 0)
         XCTAssertEqual(delegate.indexOfSelectedRowMethodCalls, 0)
         XCTAssertEqual(delegate.didSelectRowMethodCalls, 0)
 
@@ -23,6 +24,7 @@ final class TVOSPickerTests: XCTestCase {
         XCTAssertEqual(picker.components.count, 0)
         XCTAssertEqual(delegate.numberOfComponentsMethodCalls, 0)
         XCTAssertEqual(delegate.numberOfRowsInComponentMethodCalls, 0)
+        XCTAssertEqual(delegate.rangeOfAllowedRowsInComponentMethodCalls, 0)
         XCTAssertEqual(delegate.indexOfSelectedRowMethodCalls, 0)
         XCTAssertEqual(delegate.didSelectRowMethodCalls, 0)
 
@@ -41,6 +43,7 @@ final class TVOSPickerTests: XCTestCase {
         XCTAssertEqual(delegate.numberOfComponentsMethodCalls, 5)
 
         // called once per component
+        XCTAssertEqual(delegate.rangeOfAllowedRowsInComponentMethodCalls, 4)
         XCTAssertEqual(delegate.numberOfRowsInComponentMethodCalls, 4)
         XCTAssertEqual(delegate.indexOfSelectedRowMethodCalls, 4)
         XCTAssertEqual(delegate.didSelectRowMethodCalls, 4)
@@ -48,6 +51,7 @@ final class TVOSPickerTests: XCTestCase {
         delegate.columnCounts.removeLast(2)
         delegate.numberOfComponentsMethodCalls = 0
         delegate.numberOfRowsInComponentMethodCalls = 0
+        delegate.rangeOfAllowedRowsInComponentMethodCalls = 0
         delegate.didSelectRowMethodCalls = 0
         delegate.indexOfSelectedRowMethodCalls = 0
         picker.reloadData()
@@ -62,7 +66,8 @@ final class TVOSPickerTests: XCTestCase {
         XCTAssertEqual(delegate.numberOfComponentsMethodCalls, 3)
 
         // called once per component
-        XCTAssertEqual(delegate.numberOfRowsInComponentMethodCalls,2)
+        XCTAssertEqual(delegate.numberOfRowsInComponentMethodCalls, 2)
+        XCTAssertEqual(delegate.rangeOfAllowedRowsInComponentMethodCalls, 2)
         XCTAssertEqual(delegate.indexOfSelectedRowMethodCalls, 2)
         XCTAssertEqual(delegate.didSelectRowMethodCalls, 2)
 
@@ -81,6 +86,7 @@ class MockPickerDelegate: TVOSPickerViewDelegate {
 
     var numberOfComponentsMethodCalls = 0
     var numberOfRowsInComponentMethodCalls = 0
+    var rangeOfAllowedRowsInComponentMethodCalls = 0
     var didSelectRowMethodCalls = 0
     var indexOfSelectedRowMethodCalls = 0
 
@@ -97,6 +103,11 @@ class MockPickerDelegate: TVOSPickerViewDelegate {
     func pickerView(_ pickerView: TVOSPickerView, numberOfRowsInComponent component: Int) -> Int {
         numberOfRowsInComponentMethodCalls += 1
         return columnCounts[component]
+    }
+
+    func pickerView(_ pickerView: TVOSPickerView, rangeOfAllowedRowsInComponent component: Int) -> ClosedRange<Int>? {
+        rangeOfAllowedRowsInComponentMethodCalls += 1
+        return nil
     }
 
     func pickerView(_ pickerView: TVOSPickerView, titleForRow row: Int, inComponent component: Int) -> String? {

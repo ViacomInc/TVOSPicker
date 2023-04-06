@@ -7,8 +7,8 @@ final class TVOSDatePickerTests: XCTestCase {
         let delegate = GregorianCalendarDatePickerDelegate(
             order: .monthDayYear,
             locale: .init(identifier: "en_US"),
-            minYear: 1900,
-            maxYear: 2023,
+            minDate: DateComponents(calendar: Calendar.current, year: 1900, month: 1, day: 1).date!,
+            maxDate: DateComponents(calendar: Calendar.current, year: 2023, month: 12, day: 31).date!,
             initialDate: initialDate
         )
         let datePicker = TVOSDatePickerView(delegate: delegate)
@@ -22,6 +22,9 @@ final class TVOSDatePickerTests: XCTestCase {
         XCTAssertEqual(delegate.pickerView(datePicker.pickerView, numberOfRowsInComponent: 0), 12)
         XCTAssertEqual(delegate.pickerView(datePicker.pickerView, numberOfRowsInComponent: 1), 31)
         XCTAssertEqual(delegate.pickerView(datePicker.pickerView, numberOfRowsInComponent: 2), 124)
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 0), nil)
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 1), nil)
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 2), nil)
         XCTAssertEqual(delegate.indexOfSelectedRow(inComponent: 0, ofPickerView: datePicker.pickerView), 2)
         XCTAssertEqual(delegate.indexOfSelectedRow(inComponent: 1, ofPickerView: datePicker.pickerView), 14)
         XCTAssertEqual(delegate.indexOfSelectedRow(inComponent: 2, ofPickerView: datePicker.pickerView), 100)
@@ -38,8 +41,8 @@ final class TVOSDatePickerTests: XCTestCase {
         let delegate = GregorianCalendarDatePickerDelegate(
             order: .monthDayYear,
             locale: .init(identifier: "en_US"),
-            minYear: 1900,
-            maxYear: 2023,
+            minDate: DateComponents(calendar: Calendar.current, year: 1900, month: 1, day: 1).date!,
+            maxDate: DateComponents(calendar: Calendar.current, year: 2023, month: 12, day: 31).date!,
             initialDate: initialDate
         )
         let datePicker = TVOSDatePickerView(delegate: delegate)
@@ -70,8 +73,8 @@ final class TVOSDatePickerTests: XCTestCase {
         let delegate = GregorianCalendarDatePickerDelegate(
             order: .dayMonthYear,
             locale: .init(identifier: "pl"),
-            minYear: 1900,
-            maxYear: 2023,
+            minDate: DateComponents(calendar: Calendar.current, year: 1900, month: 1, day: 1).date!,
+            maxDate: DateComponents(calendar: Calendar.current, year: 2023, month: 12, day: 31).date!,
             initialDate: initialDate
         )
         let datePicker = TVOSDatePickerView(delegate: delegate)
@@ -103,5 +106,46 @@ final class TVOSDatePickerTests: XCTestCase {
         picker.style = .default
         XCTAssertEqual(picker.style, .default)
         XCTAssertEqual(picker.style, picker.pickerView.style)
+    }
+
+    func testGregorianCalendarDatePickerDelegate_RangeOfAllowedRows() {
+        let minDate = DateComponents(calendar: Calendar.current, year: 1991, month: 7, day: 3).date!
+        let maxDate = DateComponents(calendar: Calendar.current, year: 2000, month: 3, day: 15).date!
+        let initialDate = DateComponents(calendar: Calendar.current, year: 1995, month: 2, day: 4).date!
+        let delegate = GregorianCalendarDatePickerDelegate(
+            order: .monthDayYear,
+            locale: .init(identifier: "en_US"),
+            minDate: minDate,
+            maxDate: maxDate,
+            initialDate: initialDate
+        )
+        let datePicker = TVOSDatePickerView(delegate: delegate)
+
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 0), nil) // all months allowed
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 1), nil) // all days allowed
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 2), nil)
+
+        delegate.pickerView(datePicker.pickerView, didSelectRow: 0, inComponent: 2) // selected minYear
+        // date changed to minDate
+        XCTAssertEqual(delegate.date, minDate)
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 0), 6...11) // only months from Jul to Dec allowed
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 1), 2...30) // only days from 3rd to 31st allowed
+
+        delegate.pickerView(datePicker.pickerView, didSelectRow: 1, inComponent: 2) // selected minYear + 1
+        XCTAssertEqual(delegate.date, DateComponents(calendar: Calendar.current, year: 1992, month: 7, day: 3).date!)
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 0), nil) // all months allowed
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 1), nil) // all days allowed
+
+        // select 12th of December
+        delegate.pickerView(datePicker.pickerView, didSelectRow: 11, inComponent: 0)
+        delegate.pickerView(datePicker.pickerView, didSelectRow: 11, inComponent: 1)
+        XCTAssertEqual(delegate.date, DateComponents(calendar: Calendar.current, year: 1992, month: 12, day: 12).date!)
+
+        // select max year
+        delegate.pickerView(datePicker.pickerView, didSelectRow: 9, inComponent: 2)
+        // date changed to maxDate
+        XCTAssertEqual(delegate.date, maxDate)
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 0), 0...2) // only months from Jan to Mar allowed
+        XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 1), 0...14) // only days from 1st to 15th allowed
     }
 }
