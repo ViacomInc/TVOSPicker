@@ -9,6 +9,7 @@ public protocol TVOSPickerViewDelegate: AnyObject {
     /// Number of rows in a given column of the picker view.
     func pickerView(_ pickerView: TVOSPickerView, numberOfRowsInComponent component: Int) -> Int
 
+    /// Optionally provide to limit rows that are allowed to be focused inside the given component of the picker view. Defaults to nil which is equivalent to allowing all rows to be focused.
     func pickerView(_ pickerView: TVOSPickerView, rangeOfAllowedRowsInComponent component: Int) -> ClosedRange<Int>?
 
     /// Optionally implement this method to customize width of each column of the picker view. By default, width of the picker view is divided equally between columns (accounting for `style.componentSpacing`).
