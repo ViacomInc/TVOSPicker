@@ -52,7 +52,7 @@ public class GregorianCalendarDatePickerDelegate {
     /// - parameter locale: (Optional) Locale used to localize ordinal numbers, month names etc. Defaults to `.autoupdatingCurrent`.
     /// - parameter minDate: (Optional) The minimum date that is allowed to be selected in the picker view. Defaults to 1st of January, 1900.
     /// - parameter maxDate: (Optional) The maximum date that is allowed to be selected in the picker view. Must be greater than or equal to `minDate`. Defaults to current date.
-    /// - parameter initialDate: (Optional) The date that is selected by default in the picker view. Defaults to `Date()`. This date must be in range between minYear and `maxYear`.
+    /// - parameter initialDate: (Optional) The date that is selected by default in the picker view. Defaults to current date. This date must be in range between `minDate` and `maxDate`.
     /// - parameter stringFromMonthIndex: (Optional) Closure used to provide a string that will be displayed for a given row in the month component of the picker view. Defaults to using `Calendar.shortMonthSymbols`, e.g. "Jan" for "January".
     /// - parameter accessibilityStringFromMonthIndex: (Optional) Closure used to provide a string that will be read by VoiceOver for a given row in the month component of the picker view. Defaults to using `Calendar.monthSymbols`, e.g. "January".
     /// - parameter stringFromDayIndex: (Optional) Closure used to provide a string that will be displayed for a given row in the day component of the picker view. Defaults to the number with 0 padding, e.g. "01", "02", ..., "25", ..., etc.
