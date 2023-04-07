@@ -64,7 +64,7 @@ public class GregorianCalendarDatePickerDelegate {
         locale: Locale = .autoupdatingCurrent,
         minDate: Date? = nil,
         maxDate: Date? = nil,
-        initialDate: Date = Date(),
+        initialDate: Date? = nil,
         stringFromMonthIndex: ((Int) -> String)? = nil,
         accessibilityStringFromMonthIndex: ((Int) -> String)? = nil,
         stringFromDayIndex: ((Int) -> String)? = nil,
@@ -75,11 +75,12 @@ public class GregorianCalendarDatePickerDelegate {
         self.order = order
         self.locale = locale
         calendar.locale = locale
-        self.minDate = minDate ?? calendar.date(from: DateComponents(year: 1900, month: 1, day: 1)) ?? Date()
-        self.maxDate = maxDate ?? Date()
+        let now = Date()
+        self.minDate = minDate ?? calendar.date(from: DateComponents(year: 1900, month: 1, day: 1)) ?? now
+        self.maxDate = maxDate ?? now
         precondition(self.minDate <= self.maxDate, "DatePickerDataSource misconfigured! maxDate has to be greater or equal to minDate")
-        self.date = initialDate
-        precondition(initialDate >= self.minDate && initialDate <= self.maxDate, "DatePickerDataSource misconfigured! initialDate has to be in range of minDate...maxDate")
+        self.date = initialDate ?? now
+        precondition(self.date >= self.minDate && self.date <= self.maxDate, "DatePickerDataSource misconfigured! initialDate has to be in range of minDate...maxDate")
 
         self.stringFromMonthIndex = stringFromMonthIndex ?? { [calendar] monthIndex in
             calendar.shortMonthSymbols[monthIndex]
