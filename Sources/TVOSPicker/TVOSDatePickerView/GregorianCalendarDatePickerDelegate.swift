@@ -40,9 +40,11 @@ public class GregorianCalendarDatePickerDelegate {
 
     private let minDate: Date
     private lazy var minYear = calendar.component(.year, from: minDate)
+    private lazy var minDateMonth = calendar.component(.month, from: minDate)
 
     private let maxDate: Date
     private lazy var maxYear = calendar.component(.year, from: maxDate)
+    private lazy var maxDateMonth = calendar.component(.month, from: maxDate)
 
     public private(set) var date: Date
 
@@ -147,6 +149,11 @@ extension GregorianCalendarDatePickerDelegate: TVOSPickerViewDelegate {
         case .day:
             let currentYear = calendar.component(.year, from: date)
             if currentYear != minYear && currentYear != maxYear {
+                return nil
+            }
+            let currentMonth = calendar.component(.month, from: date)
+            if (currentYear == minYear && currentMonth > minDateMonth)
+                || (currentYear == maxYear && currentMonth < maxDateMonth) {
                 return nil
             }
             var minDayIndex = 0
