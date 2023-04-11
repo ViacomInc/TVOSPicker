@@ -136,7 +136,11 @@ class TVOSPickerComponentView: UIView {
         tableView.reloadData()
         if let index = delegate?.indexOfSelectedRow(inPickerComponentView: self) {
             let path = IndexPath(item: index, section: 0)
-            tableView.selectRow(at: path, animated: false, scrollPosition: .middle)
+            tableView.selectRow(at: path, animated: false, scrollPosition: .none)
+            DispatchQueue.main.async {
+                let y = self.tableView.rectForRow(at: path).midY - self.tableView.contentInset.top
+                self.tableView.setContentOffset(.init(x: 0, y: y), animated: true)
+            }
             didSelectRow(index)
         }
         updateVisibleCellsMask()
