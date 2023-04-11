@@ -210,13 +210,55 @@ extension GregorianCalendarDatePickerDelegate: TVOSPickerViewDelegate {
         }
     }
 
+    private func updateMonth(by diff: Int) {
+        var newDate = calendar.date(byAdding: .month, value: diff, to: date, wrappingComponents: true) ?? date
+        if newDate < minDate {
+            newDate = minDate
+        }
+        if newDate > maxDate {
+            newDate = maxDate
+        }
+        date = newDate
+    }
+
+    private func updateYear(by diff: Int) -> Set<Calendar.Component> {
+        let currentYear = calendar.component(.year, from: date)
+        var newDate = calendar.date(byAdding: .year, value: diff, to: date, wrappingComponents: true) ?? date
+        let newYear = calendar.component(.year, from: newDate)
+        var shouldUpdateLimits = false
+        if newYear == minYear || currentYear == minYear {
+            shouldUpdateLimits = true
+            if newDate < minDate {
+                newDate = minDate
+            }
+        }
+        if newYear == maxYear || currentYear == maxYear {
+            shouldUpdateLimits = true
+            if newDate > maxDate {
+                newDate = maxDate
+            }
+        }
+        let currentDaysCount = calendar.range(of: .day, in: .month, for: date)?.count ?? 0
+        date = newDate
+        let newDaysCount = calendar.range(of: .day, in: .month, for: date)?.count ?? 0
+
+        var componentsToReload: Set<Calendar.Component> = []
+        if newDaysCount != currentDaysCount || shouldUpdateLimits {
+            componentsToReload.insert(.day)
+        }
+        if shouldUpdateLimits {
+            componentsToReload.insert(.month)
+        }
+        return componentsToReload
+    }
+
     public func pickerView(_ pickerView: TVOSPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch dateComponent(forIndex: component) {
         case .month:
             let current = calendar.component(.month, from: date)
             let diff = (row + 1) - current
             guard diff != 0 else { break }
-            date = calendar.date(byAdding: .month, value: diff, to: date, wrappingComponents: true) ?? date
+            updateMonth(by: diff)
             pickerView.reloadComponent(index(ofDateComponent: .day))
         case .day:
             let current = calendar.component(.day, from: date)
@@ -227,34 +269,7 @@ extension GregorianCalendarDatePickerDelegate: TVOSPickerViewDelegate {
             let currentYear = calendar.component(.year, from: date)
             let diff = (minYear + row) - currentYear
             guard diff != 0 else { break }
-
-            var newDate = calendar.date(byAdding: .year, value: diff, to: date, wrappingComponents: true) ?? date
-
-            let newYear = calendar.component(.year, from: newDate)
-            var shouldUpdateLimits = false
-            if newYear == minYear || currentYear == minYear {
-                shouldUpdateLimits = true
-                if newDate < minDate {
-                    newDate = minDate
-                }
-            }
-            if newYear == maxYear || currentYear == maxYear {
-                shouldUpdateLimits = true
-                if newDate > maxDate {
-                    newDate = maxDate
-                }
-            }
-            let currentDaysCount = calendar.range(of: .day, in: .month, for: date)?.count ?? 0
-            date = newDate
-            let newDaysCount = calendar.range(of: .day, in: .month, for: date)?.count ?? 0
-
-            var componentsToReload: Set<Calendar.Component> = []
-            if newDaysCount != currentDaysCount || shouldUpdateLimits {
-                componentsToReload.insert(.day)
-            }
-            if shouldUpdateLimits {
-                componentsToReload.insert(.month)
-            }
+            let componentsToReload = updateYear(by: diff)
             pickerView.reloadComponents(IndexSet(componentsToReload.map(index(ofDateComponent:))))
         default:
             break
