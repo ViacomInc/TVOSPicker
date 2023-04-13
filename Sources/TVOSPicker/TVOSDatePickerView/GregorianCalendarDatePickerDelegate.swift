@@ -46,6 +46,8 @@ public class GregorianCalendarDatePickerDelegate {
     private lazy var maxYear = calendar.component(.year, from: maxDate)
     private lazy var maxDateMonth = calendar.component(.month, from: maxDate)
 
+    private let offLimitYearsDisplayed: Int
+
     public private(set) var date: Date
 
     /// Returns a new GregorianCalendarDatePickerDelegate
@@ -55,6 +57,7 @@ public class GregorianCalendarDatePickerDelegate {
     /// - parameter minDate: (Optional) The minimum date that is allowed to be selected in the picker view. Defaults to 1st of January, 1900.
     /// - parameter maxDate: (Optional) The maximum date that is allowed to be selected in the picker view. Must be greater than or equal to `minDate`. Defaults to current date.
     /// - parameter initialDate: (Optional) The date that is selected by default in the picker view. Defaults to current date. This date must be in range between `minDate` and `maxDate`.
+    /// - parameter offLimitYearsDisplayed: (Optional) Number of year component entries that should be visible (but unselectable) outside of year range between `minDate` and `maxDate`. Has to be greater than or equal to zero. Defaults to 20.
     /// - parameter stringFromMonthIndex: (Optional) Closure used to provide a string that will be displayed for a given row in the month component of the picker view. Defaults to using `Calendar.shortMonthSymbols`, e.g. "Jan" for "January".
     /// - parameter accessibilityStringFromMonthIndex: (Optional) Closure used to provide a string that will be read by VoiceOver for a given row in the month component of the picker view. Defaults to using `Calendar.monthSymbols`, e.g. "January".
     /// - parameter stringFromDayIndex: (Optional) Closure used to provide a string that will be displayed for a given row in the day component of the picker view. Defaults to the number with 0 padding, e.g. "01", "02", ..., "25", ..., etc.
@@ -67,6 +70,7 @@ public class GregorianCalendarDatePickerDelegate {
         minDate: Date? = nil,
         maxDate: Date? = nil,
         initialDate: Date? = nil,
+        offLimitYearsDisplayed: Int = 20,
         stringFromMonthIndex: ((Int) -> String)? = nil,
         accessibilityStringFromMonthIndex: ((Int) -> String)? = nil,
         stringFromDayIndex: ((Int) -> String)? = nil,
@@ -82,7 +86,15 @@ public class GregorianCalendarDatePickerDelegate {
         self.maxDate = maxDate ?? now
         precondition(self.minDate <= self.maxDate, "DatePickerDataSource misconfigured! maxDate has to be greater or equal to minDate")
         self.date = initialDate ?? now
-        precondition(self.date >= self.minDate && self.date <= self.maxDate, "DatePickerDataSource misconfigured! initialDate has to be in range of minDate...maxDate")
+        precondition(
+            self.date >= self.minDate && self.date <= self.maxDate,
+            "DatePickerDataSource misconfigured! initialDate has to be in range of minDate...maxDate"
+        )
+        self.offLimitYearsDisplayed = offLimitYearsDisplayed
+        precondition(
+            offLimitYearsDisplayed >= 0,
+            "DatePickerDataSource misconfigured! offLimitYearsDisplayed has to be greater than or equal to zero"
+        )
 
         self.stringFromMonthIndex = stringFromMonthIndex ?? { [calendar] monthIndex in
             calendar.shortMonthSymbols[monthIndex]
@@ -123,7 +135,7 @@ extension GregorianCalendarDatePickerDelegate: TVOSPickerViewDelegate {
         case .day:
             return calendar.range(of: .day, in: .month, for: date)?.count ?? 0
         case .year:
-            return maxYear - minYear + 1
+            return 2 * offLimitYearsDisplayed + (maxYear - minYear + 1)
         default:
             return 0
         }
@@ -166,6 +178,10 @@ extension GregorianCalendarDatePickerDelegate: TVOSPickerViewDelegate {
             }
             return minDayIndex...maxDayIndex
 
+        case .year:
+            guard offLimitYearsDisplayed > 0 else { return nil }
+            return offLimitYearsDisplayed...(offLimitYearsDisplayed + maxYear - minYear)
+
         default:
             return nil
         }
@@ -178,7 +194,7 @@ extension GregorianCalendarDatePickerDelegate: TVOSPickerViewDelegate {
         case .day:
             return stringFromDayIndex(row)
         case .year:
-            return stringFromYear(minYear + row)
+            return stringFromYear(minYear + row - offLimitYearsDisplayed)
         default:
             return nil
         }
@@ -191,7 +207,7 @@ extension GregorianCalendarDatePickerDelegate: TVOSPickerViewDelegate {
         case .day:
             return accessibilityStringFromDayIndex(row)
         case .year:
-            return accessibilityStringFromYear(minYear + row)
+            return accessibilityStringFromYear(minYear + row - offLimitYearsDisplayed)
         default:
             return nil
         }
@@ -204,7 +220,7 @@ extension GregorianCalendarDatePickerDelegate: TVOSPickerViewDelegate {
         case .day:
             return calendar.component(.day, from: date) - 1
         case .year:
-            return calendar.component(.year, from: date) - minYear
+            return offLimitYearsDisplayed + calendar.component(.year, from: date) - minYear
         default:
             return nil
         }
@@ -267,7 +283,7 @@ extension GregorianCalendarDatePickerDelegate: TVOSPickerViewDelegate {
             date = calendar.date(byAdding: .day, value: diff, to: date, wrappingComponents: true) ?? date
         case .year:
             let currentYear = calendar.component(.year, from: date)
-            let diff = (minYear + row) - currentYear
+            let diff = (minYear + row - offLimitYearsDisplayed) - currentYear
             guard diff != 0 else { break }
             let componentsToReload = updateYear(by: diff)
             pickerView.reloadComponents(IndexSet(componentsToReload.map(index(ofDateComponent:))))

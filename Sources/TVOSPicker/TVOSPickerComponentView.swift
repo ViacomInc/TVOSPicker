@@ -25,6 +25,7 @@ class TVOSPickerComponentView: UIView {
     internal var widthConstraint: NSLayoutConstraint?
 
     private var focusInside = false
+    private var isFastScrolling = false
 
     weak var delegate: TVOSPickerComponentViewDelegate?
 
@@ -220,10 +221,33 @@ extension TVOSPickerComponentView: UITableViewDataSource {
     }
 }
 
+private extension Int {
+    func clamped(by range: ClosedRange<Int>?) -> Int {
+        guard let range else { return self }
+        return Swift.max(range.lowerBound, Swift.min(self, range.upperBound))
+    }
+}
+
 // MARK: UITableViewDelegate conformance
 extension TVOSPickerComponentView: UITableViewDelegate {
+    private func indexPathOfMiddleMostCell() -> IndexPath? {
+        let middle = tableView.contentOffset.y + 0.5 * tableView.bounds.height
+        let distanceToMiddle = { (cell: UITableViewCell) -> CGFloat in
+            abs(cell.frame.midY - middle)
+        }
+        let closestCell = tableView.visibleCells.min { lhs, rhs in
+            distanceToMiddle(lhs) < distanceToMiddle(rhs)
+        }
+        return closestCell.flatMap(tableView.indexPath(for:))
+    }
+
     func indexPathForPreferredFocusedView(in tableView: UITableView) -> IndexPath? {
-        tableView.indexPathForSelectedRow
+        // when fast scrolling stops, this function is called to choose a cell that is to be focused
+        // we want to select a cell that is closest to the middle of the visible area but within rangeOfAllowedIndices
+        if isFastScrolling, let middleMostCellIndex = indexPathOfMiddleMostCell()?.item {
+            return IndexPath(item: middleMostCellIndex.clamped(by: rangeOfAllowedIndices), section: 0)
+        }
+        return tableView.indexPathForSelectedRow
     }
 
     func tableView(_ tableView: UITableView, didUpdateFocusIn context: UITableViewFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
@@ -234,9 +258,14 @@ extension TVOSPickerComponentView: UITableViewDelegate {
                     self.selectedCellBackground.backgroundColor = self.style.backgrounds.selectedCellBackgroundColor
                     self.selectedCellBackground.transform = .identity
                 }
+                // if focus lands on a subview of the table view but it's not a cell,
+                // it must be the "_UIFocusFastScrollingIndexBarView" which appears
+                // and holds focus while fast scrolling
+                isFastScrolling = context.nextFocusedView?.isDescendant(of: tableView) ?? false
             }
             return
         }
+        isFastScrolling = false
         if !focusInside {
             focusInside = true
             coordinator.addCoordinatedAnimations {
