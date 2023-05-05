@@ -37,12 +37,17 @@ public class TVOSDatePickerView: UIView {
     public var delegate: GregorianCalendarDatePickerDelegate? {
         didSet {
             pickerView.delegate = delegate
+            delegate?.onDateChanged = { [weak self] updatedDate in
+                self?.onDateChanged?(updatedDate)
+            }
         }
     }
 
     public var date: Date? {
         delegate?.date
     }
+
+    public var onDateChanged: ((Date) -> Void)?
 
     public override var preferredFocusEnvironments: [UIFocusEnvironment] {
         pickerView.preferredFocusEnvironments
@@ -55,6 +60,9 @@ public class TVOSDatePickerView: UIView {
 
         super.init(frame: .zero)
 
+        self.delegate?.onDateChanged = { [weak self] updatedDate in
+            self?.onDateChanged?(updatedDate)
+        }
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(pickerView)
         NSLayoutConstraint.activate([
