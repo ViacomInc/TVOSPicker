@@ -153,4 +153,32 @@ final class TVOSDatePickerTests: XCTestCase {
         XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 0), 0...2) // only months from Jan to Mar allowed
         XCTAssertEqual(delegate.pickerView(datePicker.pickerView, rangeOfAllowedRowsInComponent: 1), 0...14) // only days from 1st to 15th allowed
     }
+
+    func testGregorianCalendarDatePickerDelegate_CallingDatePicker_onDateChanged_closure() {
+        let minDate = DateComponents(calendar: Calendar.current, year: 1991, month: 7, day: 3).date!
+        let maxDate = DateComponents(calendar: Calendar.current, year: 2000, month: 3, day: 15).date!
+        let initialDate = DateComponents(calendar: Calendar.current, year: 1995, month: 2, day: 4).date!
+        let offLimitYearsDisplayed = 100
+        let delegate = GregorianCalendarDatePickerDelegate(
+            order: .monthDayYear,
+            locale: .init(identifier: "en_US"),
+            minDate: minDate,
+            maxDate: maxDate,
+            initialDate: initialDate,
+            offLimitYearsDisplayed: offLimitYearsDisplayed
+        )
+        let datePicker = TVOSDatePickerView(delegate: delegate)
+
+        var selectedDate: Date? = nil
+        datePicker.onDateChanged = { date in
+            selectedDate = date
+        }
+
+        // select 12th of December
+        delegate.pickerView(datePicker.pickerView, didSelectRow: 11, inComponent: 0)
+        delegate.pickerView(datePicker.pickerView, didSelectRow: 11, inComponent: 1)
+
+        XCTAssertNotNil(selectedDate)
+        XCTAssertEqual(delegate.date, selectedDate)
+    }
 }
