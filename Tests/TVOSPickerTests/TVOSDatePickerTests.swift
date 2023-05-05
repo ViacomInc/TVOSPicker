@@ -178,6 +178,7 @@ final class TVOSDatePickerTests: XCTestCase {
         delegate.pickerView(datePicker.pickerView, didSelectRow: 11, inComponent: 0)
         delegate.pickerView(datePicker.pickerView, didSelectRow: 11, inComponent: 1)
 
+        XCTAssertNotNil(selectedDate)
         XCTAssertEqual(delegate.date, selectedDate)
     }
 }
