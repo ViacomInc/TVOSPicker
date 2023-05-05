@@ -48,7 +48,8 @@ public class GregorianCalendarDatePickerDelegate {
 
     private let offLimitYearsDisplayed: Int
 
-    /// Returns the date that is currently set in the picker view. Also triggers calling the `onDateChanged` closure on setting new value.
+    /// Returns the date that is currently set in the picker view.
+    /// Also triggers calling the `onDateChanged` closure on setting new value.
     public private(set) var date: Date {
         didSet {
             onDateChanged?(date)
