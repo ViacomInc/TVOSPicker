@@ -4,7 +4,8 @@ This package provides a component that is missing from UIKit on tvOS - a picker 
 
 This package also provides a simple date picker built on top of the base TVOSPickerView component. Currently, it only supports Gregorian calendar.
 
-https://user-images.githubusercontent.com/126462761/228228197-5b0a9056-5fe6-4642-8752-8ade34af3413.mp4
+https://github.com/ViacomInc/TVOSPicker/assets/126462761/7fbea5d4-00ec-4d0a-8103-af45f1e087ce
+
 
 ## Requirements
 - Swift 5.7
