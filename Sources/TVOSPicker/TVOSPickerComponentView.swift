@@ -278,7 +278,7 @@ extension TVOSPickerComponentView: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, canFocusRowAt indexPath: IndexPath) -> Bool {
-        if !focusInside, let selected = tableView.indexPathForSelectedRow {
+        if !focusInside, !isFastScrolling, let selected = tableView.indexPathForSelectedRow {
             return indexPath == selected
         }
         return rangeOfAllowedIndices?.contains(indexPath.item) ?? true
